@@ -2,6 +2,7 @@
 
 \documentclass[12pt,compress]{beamer}
 \usepackage{newtxtext,newtxmath}
+\usepackage[utf8]{inputenc}
 \usepackage{microtype}
 \usepackage{array}
 \usepackage{hyperref}
@@ -21,7 +22,7 @@
 
 
 \addbibresource{bethard.bib}
-\ExecuteBibliographyOptions{url=false}
+\addbibresource{extra.bib}
 \renewcommand*{\bibfont}{\scriptsize}
 
 % Define UA colors
@@ -260,7 +261,39 @@ Rioting against joblessness and other social ills has scarred many cities in the
 \section{Timelines as graphs}
 
 
-\begin{frame}{Timelines as graphs}
+\begin{frame}{Timelines as graphs: ISO-TimeML \smallcite{pustejovsky2010iso}}
+\begin{columns}
+\begin{column}{0.35\textwidth}
+\small
+At least 11 people have died in new clashes with security forces in Tunisia after four weeks of unrest, it was reported today.
+Rioting against joblessness and other social ills has scarred many cities in the country since 17 December, when a 26-year-old graduate set himself on fire when police confiscated his fruits and vegetables for selling without a permit\ldots
+\end{column}
+{\Huge $\Rightarrow$}
+\begin{column}{0.55\textwidth}
+\small
+\begin{tikzpicture}[auto]
+\node[draw=event,thick] at (0, 6) (selling) {selling};
+\node[draw=event,thick] at (0, 5) (confiscated) {confiscated}
+  edge [<-] node {\textsc{before}} (selling);
+\node[draw=event,thick] at (0, 4) (on fire) {on fire}
+  edge [<-] node {\textsc{before}} (confiscated);
+\node[draw=time,thick] at (3.5, 4) (17 December) {17 December}
+  edge [->] node {\textsc{includes}} (on fire);
+\node[draw=event,thick] at (0, 3) (rioting) {rioting}
+  edge [<-] node {\textsc{before}} (on fire);
+\node[draw=event,thick] at (0, 2) (unrest) {unrest}
+  edge [->] node {\textsc{includes}} (rioting);
+\node[draw=time,thick] at (3.5, 2) (four weeks) {four weeks}
+  edge [->] node {\textsc{includes}} (unrest);
+\node[draw=event,thick] at (0, 1) (clashes) {clashes}
+  edge [<-] node {\textsc{before}} (unrest);
+\node[draw=event,thick] at (0, 0) (died) {died}
+  edge [<-] node {\textsc{includes}} (clashes);
+\node[draw=time,thick] at (3.5, 0) (today) {today}
+  edge [->] node {\textsc{includes}} (died);
+\end{tikzpicture}
+\end{column}
+\end{columns}
 \end{frame}
 
 
