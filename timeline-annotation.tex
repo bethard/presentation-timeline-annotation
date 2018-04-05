@@ -349,10 +349,17 @@ Rioting against joblessness and other social ills has scarred many cities in the
 
 
 \begin{frame}{Annotating pair-wise relations}
-\strut\alert{
-\only<2>{TimeBank \smallcite{pustejovsky2003timebank}: salient relations}%
-\only<3>{TempEval \smallcite{verhagen-EtAl:2010:SemEval}: frequent pairs}%
-\only<4->{Dense Timebank \smallcite{cassidy-etal:2014:ACLShort}: all pairs in adjacent sentences}}
+\strut
+\alert{
+\only<2-4>{TimeBank \smallcite{pustejovsky2003timebank}: salience}%
+\only<5-7>{TempEval \smallcite{verhagen-EtAl:2010:SemEval}: frequent pairs}%
+\only<8-14>{Dense Timebank \smallcite{cassidy-etal:2014:ACLShort}: all nearby pairs}%
+\hfill
+\only<4,7,14>{Agreement:}
+\only<4>{0.55}%
+\only<7>{0.65}%
+\only<14>{0.65}%
+}
 
 \bigskip
 ``There were four or five people inside, and they just
@@ -375,30 +382,30 @@ it did not
 that anyone else was
 \AnnotateTwo{injured}{event}{injured}.
 \begin{tikzpicture}[remember picture, overlay]
-\only<2>{
+\only<3-4>{
 \AnnotateLink{out=60, in=210, relation label=after, pos=0.05}{fled.north}{started.south}
 \AnnotateLink{out=20, in=200, relation label=is-included}{hit.north}{firing.south}
 \AnnotateLink{out=165, in=15, relation label=after, swap}{pronounced.west}{hit.east}
 }
-\only<3>{
+\only<6-7>{
 \AnnotateLink{out=15, in=165, relation label=overlap-or-after}{appear.east}{injured.west}
 \AnnotateLink{out=315, in=135, relation label=overlap}{hit.south}{fled.north}
 \AnnotateLink{out=210, in=30, relation label=before}{started.south}{hit.north}
 }
-\only<5->{
+\only<9->{
 \AnnotateLink{}{started.south}{firing}
 }
-\only<6->{
+\only<10->{
 \AnnotateLink{}{started.south}{firing}
 \AnnotateLink{}{started.south}{hit}
 }
-\only<7->{
+\only<11->{
 \AnnotateLink{}{started.south}{pronounced}
 }
-\only<8->{
+\only<12->{
 \AnnotateLink{}{started.south}{dead}
 }
-\only<9->{
+\only<13->{
 \AnnotateLink{}{hit.east}{firing}
 \AnnotateLink{}{firing.south}{pronounced}
 \AnnotateLink{}{firing.south}{dead}
