@@ -38,6 +38,7 @@
   relation-path/.style={thick, ->},
   on/.code n args={2}{\alt<#1>{\pgfkeysalso{#2}}{}},
   annotate on/.code n args={2}{\alt<#1>{}{\pgfkeysalso{opacity=0, every #2 node part/.style={text opacity=1}}}},
+  relation label/.style={edge node={node[auto, font=\scshape]{#1}}},
 }
 \setlength\fboxrule{1pt}
 \setlength\fboxsep{1pt}
@@ -116,7 +117,6 @@
 % #4: end anchor for arrow
 \newcommand{\AnnotateLink}[4][]{%
 \path[color=time,thick,->,#1] (#3) node [circle,color=time,fill,inner sep=0.25ex,#1] {} edge[#2] (#4);}
-
 
 % command for drawing a timeline
 % #1: drawing options
@@ -348,15 +348,100 @@ Rioting against joblessness and other social ills has scarred many cities in the
 \subsection{Annotation paradigms}
 
 
-\begin{frame}{TimeBank: annotating salient relations}
-\end{frame}
+\begin{frame}{Annotating pair-wise relations}
+\strut\alert{
+\only<2>{TimeBank \smallcite{pustejovsky2003timebank}: salient relations}%
+\only<3>{TempEval \smallcite{verhagen-EtAl:2010:SemEval}: frequent pairs}%
+\only<4->{Dense Timebank \smallcite{cassidy-etal:2014:ACLShort}: all pairs in adjacent sentences}}
 
-
-\begin{frame}{TempEval: annotating sparse pair-wise relations}
-\end{frame}
-
-
-\begin{frame}{Dense TimeBank: annotating pair-wise relations}
+\bigskip
+``There were four or five people inside, and they just
+\AnnotateTwo{started}{event}{started}
+\AnnotateTwo{firing}{event}{firing}.''
+\\[1.5\baselineskip]
+Ms. Sanders was
+\AnnotateTwo{hit}{event}{hit} several times and was
+\AnnotateTwo{pronounced}{event}{pronounced}
+\AnnotateTwo{dead}{event}{dead}
+at
+\\[1.5\baselineskip]
+the scene. The other customers
+\AnnotateTwo{fled}{event}{fled},
+and the police
+\AnnotateTwo{said}{event}{said}
+it did not
+\\[1.5\baselineskip]
+\AnnotateTwo{appear}{event}{appear}
+that anyone else was
+\AnnotateTwo{injured}{event}{injured}.
+\begin{tikzpicture}[remember picture, overlay]
+\only<2>{
+\AnnotateLink{out=60, in=210, relation label=after, pos=0.05}{fled.north}{started.south}
+\AnnotateLink{out=20, in=200, relation label=is-included}{hit.north}{firing.south}
+\AnnotateLink{out=165, in=15, relation label=after, swap}{pronounced.west}{hit.east}
+}
+\only<3>{
+\AnnotateLink{out=15, in=165, relation label=overlap-or-after}{appear.east}{injured.west}
+\AnnotateLink{out=315, in=135, relation label=overlap}{hit.south}{fled.north}
+\AnnotateLink{out=210, in=30, relation label=before}{started.south}{hit.north}
+}
+\only<5->{
+\AnnotateLink{}{started.south}{firing}
+}
+\only<6->{
+\AnnotateLink{}{started.south}{firing}
+\AnnotateLink{}{started.south}{hit}
+}
+\only<7->{
+\AnnotateLink{}{started.south}{pronounced}
+}
+\only<8->{
+\AnnotateLink{}{started.south}{dead}
+}
+\only<9->{
+\AnnotateLink{}{hit.east}{firing}
+\AnnotateLink{}{firing.south}{pronounced}
+\AnnotateLink{}{firing.south}{dead}
+\AnnotateLink{}{hit.east}{pronounced}
+\AnnotateLink{}{hit.east}{dead}
+\AnnotateLink{}{hit.east}{said}
+\AnnotateLink{}{dead.south}{pronounced}
+\AnnotateLink{}{fled.east}{pronounced}
+\AnnotateLink{}{pronounced.south}{said}
+\AnnotateLink{}{dead.south}{said}
+\AnnotateLink{}{fled.east}{said}
+\AnnotateLink{}{fled.south}{appear}
+\AnnotateLink{}{appear.east}{said}
+\AnnotateLink{}{injured.east}{said}
+\AnnotateLink{}{injured.west}{appear}
+}
+\end{tikzpicture}
+%NYT19980212.0019
+%TBE TBEI  TE2
+%e20 ei226 e19 started
+%e50 ei227 e20 firing
+%e21 ei228 e21 hit
+%e22 ei229 e22 pronounced
+%e51 ei230 e23 dead
+%e25 ei231 e24 fled
+%e26 ei232 e25 said
+%e27 ei233 e26 appear
+%e29 ei234 e27 injured
+%
+%TimeBank:
+%fled AFTER started
+%hit IS_INCLUDED firing
+%pronounced AFTER hit
+%
+%TempEval 2013:
+%fled AFTER started
+%hit IS_INCLUDED firing
+%pronounced AFTER hit
+%
+%TempEval 2010:
+%appear OVERLAP-OR-AFTER injured
+%hit OVERLAP fled
+%started BEFORE hit
 \end{frame}
 
 
