@@ -38,7 +38,7 @@
   relation-path/.style={thick, ->},
   on/.code n args={2}{\alt<#1>{\pgfkeysalso{#2}}{}},
   annotate on/.code n args={2}{\alt<#1>{}{\pgfkeysalso{opacity=0, every #2 node part/.style={text opacity=1}}}},
-  relation label/.style={edge node={node[auto, font=\scshape]{#1}}},
+  relation label/.style={edge node={node[auto, font=\scshape, inner sep=2pt]{#1}}},
 }
 \setlength\fboxrule{1pt}
 \setlength\fboxsep{1pt}
@@ -453,6 +453,60 @@ that anyone else was
 
 
 \begin{frame}{Annotating syntax-driven pair-wise relations}
+\strut\alert{%
+\only<1>{TempEval: arbitrary pairs}%
+\only<2->{\cite{bethard-etal:2007:IJSC}: linguistically motivated pairs \only<6->{\hfill Agreement: 0.90}}}%
+
+
+\smallskip
+\AnnotateTwoOn{2-}{turning}{event}{Turning}
+its back on
+\AnnotateTwo[draw=time]{210-years}{time}{210 years}
+of loyalty to the British royal family,
+\\
+a constitutional convention
+\AnnotateTwoOn{2-}{voted}{event}{voted}
+overwhelmingly
+\AnnotateTwoOn[draw=time]{2-}{friday}{time}{Friday}
+to
+\AnnotateTwo{make}{Event}{make}
+\\[\baselineskip]
+Australia a republic under its own president.
+\begin{tikzpicture}[remember picture,overlay]
+\only<1>{
+\AnnotateLink{relation label=before}{210-years.south east}{make.west}
+}
+\end{tikzpicture}
+
+\onslide<3->
+\centering
+\begin{forest}
+for tree={l sep=0.5em, l=0.5em}
+[S
+  [VP
+    [{\eventbox{Turning}},name=turning]
+    [{\ldots}]
+    [PP
+      [on]
+      [NP
+        [{\timebox{210 years}},name=210years]
+        [{\ldots}] ] ] ]
+  [{\ldots}]
+  [VP
+    [{\eventbox{voted}},name=voted]
+    [{\ldots}]
+    [{\timebox{Friday}},name=friday]
+    [VP
+      [to]
+      [{\eventbox{make}},name=make]
+      [{\ldots}] ] ] ]
+\only<4>{%
+\draw [auto,->] (turning) to [bend right] node [swap] {\textsc{after}} (210years);
+\draw [auto,<->] (turning) to [bend left] node [swap] {\textsc{identity}} (voted);
+\draw [below,->] (friday) to [bend left] node {\textsc{includes}} (voted);}
+\visible<4->{%
+\draw [auto,->] (make) to [bend left] node {\textsc{after}} (voted);}
+\end{forest}
 \end{frame}
 
 
