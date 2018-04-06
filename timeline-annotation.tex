@@ -462,7 +462,7 @@ that anyone else was
 \begin{frame}{Annotation: syntax-driven relations}
 \strut\alert{%
 \only<1>{TempEval: arbitrary pairs}%
-\only<2->{\cite{bethard-etal:2007:IJSC}: linguistically motivated pairs \only<6->{\hfill Agreement: 0.90}}}%
+\only<2->{\cite{bethard-etal:2007:IJSC}: linguistically plausible pairs \only<6->{\hfill Agr: 0.90}}}%
 
 \smallskip
 \AnnotateTwoOn{2-}{turning}{event}{Turning}
@@ -740,6 +740,7 @@ Clinical TempEval 2017 & pair classify & 43 $F_1$ \\
 \pause
 Children's stories \\
 \hline
+\cite{kolomiyets-etal:2012:ACL} & pair classify & 61 $LAS$ \\
 \cite{kolomiyets-etal:2012:ACL} & shift-reduce parser & 65 $LAS$ \\
 \hline\hline
 \end{tabular}
@@ -1102,24 +1103,38 @@ THYME corpus & \cite{laparra-etal:2018:TACL} & 75 & 77 & 76 \\
 \section{Events}
 
 
-\subsection{Annotation paradigms}
+\begin{frame}{Events}
+Re-defined for every new domain\pause:
+
+\bigskip
+\alert{TimeBank: news \hfill \only<4->{Agreement: 0.78}}
+
+\smallskip
+It is the US economic and political \eventbox{embargo} which has \eventbox{kept} Cuba \eventbox{in} a box.
+
+\pause
+\bigskip
+\alert{THYME: clinical \hfill \only<4->{Agreement: 0.87}}
+
+\smallskip
+\ldots \eventbox{discrepancies} in whether or not the \eventbox{lesion} is \eventbox{past} the muscular propria and CT-\eventbox{scan} \eventbox{read} here \eventbox{questions} wall \eventbox{thickening}\ldots
+
+\pause
+\bigskip
+Individual agreements acceptable\pause, but models generalize poorly:
+
+\smallskip
+\centering
+\begin{tabular}{ l l c }
+\hline\hline
+Train on & Test on & Performance \\
+\hline
+colon cancer & colon cancer & 92 $F_1$ \\
+colon cancer & brain cancer & 72 $F_1$ \\
+\hline\hline
+\end{tabular}
 
 
-\begin{frame}{Annotation: events as anything anchored in time}
-\end{frame}
-
-
-\begin{frame}{Annotation: clinically relevant events}
-\end{frame}
-
-
-% include event duration work?
-
-
-\subsection{Model architectures}
-
-\begin{frame}{Models: event detection as word classification}
-% major performance drop in cross-domain
 \end{frame}
 
 
@@ -1127,7 +1142,82 @@ THYME corpus & \cite{laparra-etal:2018:TACL} & 75 & 77 & 76 \\
 
 
 \begin{frame}{Summary and future directions}
+Annotation lessons:
+\begin{itemize}
+\item Focus on local decisions
+\item Respect compositionality
+\end{itemize}
+
+\pause
+Modeling lessons:
+\begin{itemize}
+\item Construct timelines incrementally; cues are local
+\item Structure tasks carefully to ensure learnability
+\end{itemize}
+
+\pause
+\bigskip
+Future directions:
+\begin{itemize}
+\item Timelines $\neq$ graphs; place events in time intervals
+\item Joint incremental parsing of times and relations
+\item Space-time interactions (e.g., interpreting \textit{rainy season})
+\end{itemize}
 \end{frame}
+
+
+\begin{frame}{Thanks!}
+\begin{columns}[t]
+  \begin{column}{0.5\textwidth}
+    Children's Hospital Boston:
+    \begin{itemize}
+      \item Guergana Savova
+      \item Tim Miller
+      \item Chen Lin
+    \end{itemize}
+%    Columbia University:
+%    \begin{itemize}
+%      \item No\'{e}mie Elhadad
+%    \end{itemize}
+    Loyola University Chicago:
+    \begin{itemize}
+      \item Dima Dligach
+    \end{itemize}
+    KU Leuven, Belgium:
+    \begin{itemize}
+      \item Marie-Francine Moens
+    \end{itemize}
+    United States Naval Academy:
+    \begin{itemize}
+      \item Nate Chambers
+    \end{itemize}
+  \end{column}
+  \begin{column}{0.5\textwidth}
+    Brandeis University:
+    \begin{itemize}
+      \item James Pustejovsky
+      \item Marc Verhagen
+    \end{itemize}
+    University of Sheffield:
+    \begin{itemize}
+      \item Leon Derczynski
+    \end{itemize}
+    Stanford University:
+    \begin{itemize}
+      \item Dan Jurafsky
+    \end{itemize}
+    University of Colorado:
+    \begin{itemize}
+      \item Jim Martin
+      \item Martha Palmer
+    \end{itemize}
+  \end{column}
+\end{columns}
+\end{frame}
+
+
+\renewcommand{\appendixname}{Supplementary Material}
+\appendix
 
 
 \begin{frame}[allowframebreaks]{References}
