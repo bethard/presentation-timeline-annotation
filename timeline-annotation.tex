@@ -457,7 +457,6 @@ that anyone else was
 \only<1>{TempEval: arbitrary pairs}%
 \only<2->{\cite{bethard-etal:2007:IJSC}: linguistically motivated pairs \only<6->{\hfill Agreement: 0.90}}}%
 
-
 \smallskip
 \AnnotateTwoOn{2-}{turning}{event}{Turning}
 its back on
@@ -511,6 +510,45 @@ for tree={l sep=0.5em, l=0.5em}
 
 
 \begin{frame}{Annotating relations as tree structures}
+
+\alert{%
+\AtNextCitekey{\defcounter{maxnames}{99}}%
+\cite{kolomiyets-etal:2012:ACL}
+\hfill
+\only<17->{Agreement: 0.70}}
+
+\bigskip
+Two travelers were
+\AnnotateTwoOn{2-}{on}{Event}{on}
+the road together, when a bear suddenly
+\\[\baselineskip]
+\AnnotateTwoOn{3-}{appeared}{Event}{appeared}
+on the scene.
+Before he
+\AnnotateTwoOn{5-}{observed}{Event}{observed}
+them, one
+\AnnotateTwoOn{6-}{made}{Event}{made}
+for a tree
+\\[\baselineskip]
+at the side of the road, and
+\AnnotateTwoOn{9-}{climbed}{Event}{climbed}
+up into the branches and
+\AnnotateTwoOn{11-}{hid}{Event}{hid}.
+\\[\baselineskip]
+The other \ldots
+\AnnotateTwoOn{13-}{threw}{Event}{threw}
+himself on the ground and
+\AnnotateTwoOn{15-}{pretended}{Event}{pretended}
+to be dead.%
+\begin{tikzpicture}[remember picture,overlay]%
+\only<4->{\AnnotateLink{relation label=included, near start}{appeared.north}{on.south}}%
+\only<7->{\AnnotateLink{relation label=after, out=10, in=170}{observed.east}{made.west}}%
+\only<8->{\AnnotateLink{relation label=after, swap, out=170, in=10}{made.north}{appeared.east}}%
+\only<10->{\AnnotateLink{relation label=after, near start}{climbed.north}{made.south}}%
+\only<12->{\AnnotateLink{relation label=after, swap, out=170, in=10}{hid.west}{climbed.east}}
+\only<14->{\AnnotateLink{relation label=after, near end}{threw.north}{appeared.south}}
+\only<16->{\AnnotateLink{relation label=after, swap, out=170, in=10}{pretended.west}{threw.east}}
+\end{tikzpicture}%
 \end{frame}
 
 
