@@ -39,6 +39,13 @@
   on/.code n args={2}{\alt<#1>{\pgfkeysalso{#2}}{}},
   annotate on/.code n args={2}{\alt<#1>{}{\pgfkeysalso{opacity=0, every #2 node part/.style={text opacity=1}}}},
   relation label/.style={edge node={node[auto, font=\scshape, inner sep=2pt]{#1}}},
+  hid/.style 2 args={
+    rectangle split,
+    rectangle split horizontal,
+    draw=#2,
+    rectangle split parts=#1,
+    fill=#2!40,
+    outer sep=1mm},
 }
 \setlength\fboxrule{1pt}
 \setlength\fboxsep{1pt}
@@ -711,7 +718,7 @@ up into the branches and
 \end{frame}
 
 
-\begin{frame}{Models: computers vs. human judgments}
+\begin{frame}{Models: compared to human judgments}
 \begin{tabular}{ l l c }
 \hline\hline
 Data & Model & Performance \\
@@ -746,10 +753,114 @@ Children's stories \\
 
 
 \begin{frame}{Annotation: flat time expressions}
+\alert{%
+ISO-TimeML \smallcite{pustejovsky2010iso}
+\hfill
+\only<5->{Agreement: 0.75}}
+\bigskip
+
+Each flat expression associated with a (partial) date\pause:
+
+%APW19980322.0749
+\ttfamily\small
+\bigskip
+\ldots supposed to conclude by \\
+\textless TIMEX3 value="1998-05"\textgreater May\textless/TIMEX3\textgreater
+
+\pause
+\bigskip
+\ldots invited to rejoin \\
+\textless TIMEX3 value="1998-03-08"\textgreater two weeks ago\textless/TIMEX3\textgreater
+
+\pause
+\bigskip
+\ldots in Northern Ireland for \\
+\textless TIMEX3 value="XXXX-SU"\textgreater the past three summers\textless/TIMEX3\textgreater
+\end{frame}
+
+
+\begin{frame}{Annotation: flat time expressions}
+Problem: ISO-TimeML can't represent times that:
+\begin{itemize}
+\item don't align to exactly 1 calendar unit, e.g., \textit{the past 2 summers}
+\item are relative to events, e.g., \textit{5 days postop}
+\item are unions of other times, e.g, \textit{Mondays and Fridays}
+\end{itemize}
+\pause
+\bigskip
+Humans understand such times:\\[0.5\baselineskip]
+\begin{tabular}{ c c c }
+\visible<3->{\it the past 2 summers} &
+\visible<7->{\it 5 days postop} &
+\visible<11->{\it Mondays and Fridays} \\
+\visible<4->{%
+\begin{tikzpicture}
+\tikztimeline{3}{12}
+\only<5->{%
+\tikztimelineinterval[draw=event]{3+30/365}{3+40/365}{2}{}} % more than 1/365 just so it's visible
+\only<6->{%
+\tikztimelineinterval{1+5/12}{1+8/12}{2}{}
+\tikztimelineinterval{2+5/12}{2+8/12}{2}{}}
+\end{tikzpicture}}
+&
+\visible<8->{%
+\begin{tikzpicture}
+\tikztimeline{2}{7}
+\only<9->{%
+\tikztimelineinterval[draw=event]{6/7}{7/7}{2}{}}
+\only<10->{%
+\tikztimelineinterval{11/7}{12/7}{2}{}}
+\end{tikzpicture}}
+&
+\visible<12->{%
+\begin{tikzpicture}
+\tikztimeline{3}{7}
+\tikztimelineinterval[draw=white]{0}{0}{4}{}% to ensure full vertical space when others are not shown
+\only<13->{%
+\tikztimelineinterval[draw=partialtime]{0+1/7}{0+2/7}{4}{}
+\tikztimelineinterval[draw=partialtime]{1+1/7}{1+2/7}{4}{}
+\tikztimelineinterval[draw=partialtime]{2+1/7}{2+2/7}{4}{}}
+\only<14->{%
+\tikztimelineinterval[draw=partialtime]{0+5/7}{0+6/7}{3}{}
+\tikztimelineinterval[draw=partialtime]{1+5/7}{1+6/7}{3}{}
+\tikztimelineinterval[draw=partialtime]{2+5/7}{2+6/7}{3}{}}
+\only<15>{%
+\tikztimelineinterval{0+1/7}{0+2/7}{2}{}
+\tikztimelineinterval{0+5/7}{0+6/7}{2}{}
+\tikztimelineinterval{1+1/7}{1+2/7}{2}{}
+\tikztimelineinterval{1+5/7}{1+6/7}{2}{}
+\tikztimelineinterval{2+1/7}{2+2/7}{2}{}
+\tikztimelineinterval{2+5/7}{2+6/7}{2}{}}
+\end{tikzpicture}}
+\end{tabular}
 \end{frame}
 
 
 \begin{frame}{Annotation: compositional time expressions}
+\alert{\cite{bethard-etal:2016:LREC} \hfill \only<3->{Agreement: 0.82}}
+
+\bigskip
+Annotate formally-defined, semantically-compositional time operators\pause:
+
+\bigskip
+\AnnotateThree[draw=time]{ex-mafnj-mondays}{Day-Of-Week}{Type=Monday}{Mondays}
+\hspace{0.5em}
+\AnnotateFour[draw=time]{ex-mafnj-intersection}{Intersection}{Intervals}{R-Intervals}{%
+\\[\baselineskip]
+\AnnotateThree[draw=time]{ex-mafnj-and}{Union}{R-Intervals}{and}}
+\hspace{0.5em}
+\AnnotateThree[draw=time]{ex-mafnj-fridays}{Day-Of-Week}{Type=Friday}{Fridays}
+\hspace{0.5em}
+\AnnotateFour[draw=time]{ex-mafnj-next}{Next}{Interval=DocTime}{R-Interval}{next}
+\hspace{0.5em}
+\AnnotateThree[draw=time]{ex-mafnj-january}{Month-Of-Year}{Type=January}{January}
+\begin{tikzpicture}[remember picture,overlay]%
+\AnnotateLink{out=0, in=120}{ex-mafnj-intersection.two east}{ex-mafnj-next.north}
+\AnnotateLink{out=270, in=90}{ex-mafnj-intersection.three split}{ex-mafnj-and.north}
+\AnnotateLink{out=90, in=60}{ex-mafnj-and.two west}{ex-mafnj-mondays.north}
+\AnnotateLink{out=90, in=120}{ex-mafnj-and.two east}{ex-mafnj-fridays.north}
+\AnnotateLink{out=90, in=120}{ex-mafnj-next.three east}{ex-mafnj-january.north}
+\end{tikzpicture}
 \end{frame}
 
 
@@ -757,10 +868,234 @@ Children's stories \\
 
 
 \begin{frame}{Models: time normalization via grammars}
+Hand-constructed grammars \smallcite{StroetgenGertz2013:LREjournal,bethard:2013:EMNLP,lee-EtAl:2014:P14-1}\pause:
+
+\bigskip
+\begin{tikzpicture}[produces/.style={-implies,line width=0.1em,double,double distance=0.1em}]
+\node (expr) {\word{the week of March 6}};
+\node[below=1em of expr] (tree) {\small
+\begin{forest}
+for tree={l sep=0.75em, l=0.75em}
+    [\nonterm{TimeSpan}
+        [\operator{FindEnclosing}]
+        [\nonterm{TimeSpan}
+            [\operator{FindEarlier}]
+            [\operator{Present}]
+            [\nonterm{Field}
+                [\nonterm{Field:Month}
+                    [\operator{MonthOfYear}]
+                    [3] ]
+                [\nonterm{Field:Day}
+                    [\operator{DayOfMonth}]
+                    %[\nonterm{Int:1-31}
+                        [6] ] ] ]% ]
+        [\nonterm{Unit}
+            [{\operator{Weeks}}] ] ]
+\end{forest}};
+\node[below=1em of tree] (time) {\isoweekofmarchsix};
+\node[right=5em of time] (anchor) {\word{today}=\isotoday};
+\draw[produces] (expr) to (tree);
+\draw[produces] (tree) to (time);
+\draw[produces,shorten >=2em,shorten <=2em] (anchor) to (time);
+\end{tikzpicture}
 \end{frame}
 
 
-\begin{frame}{Models: time normalization as parsing}
+\begin{frame}[t]{Models: time normalization as parsing}
+\AtNextCitekey{\defcounter{maxnames}{99}}%
+\alert{\cite{laparra-etal:2018:TACL}}
+\bigskip
+
+Step 1: Neural networks learn to find times in text
+
+\smallskip
+\begin{tikzpicture}[
+  scale=0.79, every node/.style={scale=0.79},
+  brace/.style={draw,thick,decoration=brace,decorate}]
+  \pgfmathsetmacro{\width}{3}
+  \pgfmathsetmacro{\height}{0.9}
+
+  \node (1s-i0) at (0.7, 0*\height) {Input};
+  \node (1s-fv0) at (0.7, 1*\height) {Feature};
+  \node (1s-cv0) at (0.7, 2*\height) {Embed};
+  \node (1s-g10) at (0.7, 3*\height) {Bi-GRU};
+  \node (1s-g20) at (0.7, 4*\height) {Bi-GRU};
+  \node (1s-s0) at (0.7, 5*\height) {Sigmoid};
+  \node (1s-o0) at (0.7, 6.25*\height) {Output};
+
+\foreach \c/\f/\g/\h/\o [count=\step from 1] in {M/M/Lu/NNP/{B-DayOfWeek},o/o/Ll/NNP/{I-DayOfWeek},n/n/Ll/NNP/{I-DayOfWeek},d/d/Ll/NNP/{I-DayOfWeek},\ldots} {
+    % input character
+    \ifdefstring{\c}{\ldots}{
+      \node (1s-i\step) at (\step*\width-0.2*\width, 0*\height) {\vphantom{My}\c};
+      \node (1s-fv\step) at (\step*\width-0.2*\width, 2*\height) {\ldots};
+      \node (1s-g1\step) at (\step*\width-0.2*\width, 3*\height) {\ldots};
+      \node (1s-g2\step) at (\step*\width-0.2*\width, 4*\height) {\ldots};
+      \node (1s-s\step) at (\step*\width-0.2*\width, 5*\height) {\ldots};
+      \node (1s-o\step) at (\step*\width-0.2*\width, 6.25*\height) {\ldots};
+    }{
+      \node[font=\itshape] (1s-i\step) at (\step*\width, 0*\height) {\vphantom{My}\c};
+      \node[text={ua-red}] (1s-f1\step) at (\step*\width-0.3*\width, 1*\height) {\vphantom{My}\f};
+      \node[text={ua-blue}] (1s-f2\step) at (\step*\width, 1*\height) {\vphantom{My}\g};
+      \node[text={green!50!black}] (1s-f3\step) at (\step*\width+0.3*\width, 1*\height) {\vphantom{My}\h};
+      \node[hid={2}{ua-red}] (1s-fv1\step) at (\step*\width-0.3*\width, 2*\height) {};
+      \node[hid={2}{ua-blue}] (1s-fv2\step) at (\step*\width, 2*\height) {};
+      \node[hid={2}{green!50!black}] (1s-fv3\step) at (\step*\width+0.3*\width, 2*\height) {};
+      \node[hid={3}{ua-red!50!ua-blue}] (1s-g1\step) at (\step*\width, 3*\height) {};
+      \node[hid={3}{ua-red!50!ua-blue}] (1s-g2\step) at (\step*\width, 4*\height) {};
+      \node[hid={2}{ua-red!25!ua-blue}] (1s-s\step) at (\step*\width, 5*\height) {};
+      \node[align=center,font=\scshape] (1s-o\step) at (\step*\width, 6.25*\height) {\o};
+      \draw[->] (1s-i\step.north) -> (1s-f1\step.south);
+      \draw[->] (1s-i\step.north) -> (1s-f2\step.south);
+      \draw[->] (1s-i\step.north) -> (1s-f3\step.south);
+      \draw[->] (1s-f1\step.north) -> (1s-fv1\step.south);
+      \draw[->] (1s-f2\step.north) -> (1s-fv2\step.south);
+      \draw[->] (1s-f3\step.north) -> (1s-fv3\step.south);
+      \draw[->] (\step*\width, 2.3*\height) -> (1s-g1\step.south);
+      \draw[->] (1s-g1\step.north) -> (1s-g2\step.south);
+      \draw[->] (1s-g2\step.north) -> (1s-s\step.south);
+      \draw[->] (1s-s\step.north) -> (1s-o\step.south);
+    }
+    % recurrent links
+    \ifdefstring{\step}{1}{}{
+      \pgfmathtruncatemacro{\last}{add(\step,-1)}
+      \draw[<->] (1s-g1\last.east) -> (1s-g1\step.west);
+      \draw[<->] (1s-g2\last.east) -> (1s-g2\step.west);
+    }
+  }
+\end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}[t]{Models: time normalization as parsing}
+\AtNextCitekey{\defcounter{maxnames}{99}}%
+\alert{\cite{laparra-etal:2018:TACL}}
+
+\bigskip
+Step 2: Rules decide how to compose the identified operators
+
+\smallskip
+$\operatorname{Intersection}(\operatorname{Union}(Mondays, Fridays), \operatorname{Next}(\operatorname{DocTime}, January))$
+
+\pause
+\bigskip
+Step 3: Temporal logic composes operators to yield timeline intervals:
+
+\smallskip
+$\vphantom{\left(\text{\begin{tikzpicture}[xscale=0.57, baseline={(current bounding box.center)}]
+\tikztimeline{2}{12}
+\tikztimelineinterval{1+0/12}{1+1/12}{2}{}
+\tikztimelineinterval[draw=none,text=black]{0}{1}{-0.5}{\tiny 2019}
+\tikztimelineinterval[draw=none,text=black]{1}{2}{-0.5}{\tiny 2018}
+\end{tikzpicture}}\right)}
+\alt<6->%
+% Intersection(Union(Mondays, Fridays), Next(DocTime, January)) as timeline
+{\text{\begin{tikzpicture}[xscale=0.57, baseline={(current bounding box.center)}]
+\tikztimeline{6}{7}
+\tikztimelineinterval{1+1/7}{1+2/7}{2}{}
+\tikztimelineinterval{1+5/7}{1+6/7}{2}{}
+\tikztimelineinterval{2+1/7}{2+2/7}{2}{}
+\tikztimelineinterval{2+5/7}{2+6/7}{2}{}
+\tikztimelineinterval{3+1/7}{3+2/7}{2}{}
+\tikztimelineinterval{3+5/7}{3+6/7}{2}{}
+\tikztimelineinterval{4+1/7}{4+2/7}{2}{}
+\tikztimelineinterval{4+5/7}{4+6/7}{2}{}
+\tikztimelineinterval[draw=partialtime,text=white]{1+0/7}{5+3/7}{-0.5}{\tiny\textbf{January 2019}}
+\end{tikzpicture}}}
+{\alt<2->%
+% Intersection(Union(Mondays, Fridays), Next(DocTime, January)) as operators
+{\operatorname{Intersection}\left(
+\alt<4->%
+% Union(Mondays, Fridays) as timeline
+{\text{\begin{tikzpicture}[xscale=0.57, baseline={(current bounding box.center)}]
+\tikztimeline{2}{7}
+\tikztimelineinterval{0+1/7}{0+2/7}{2}{}
+\tikztimelineinterval{0+5/7}{0+6/7}{2}{}
+\tikztimelineinterval{1+1/7}{1+2/7}{2}{}
+\tikztimelineinterval{1+5/7}{1+6/7}{2}{}
+\tikztimelineinterval[draw=none,text=black]{0}{1}{-0.5}{\tiny W1}
+\tikztimelineinterval[draw=none,text=black]{1}{2}{-0.5}{\tiny W2}
+\end{tikzpicture}}}
+% Union(Mondays, Fridays) as operator
+{\operatorname{Union}\left(
+\alt<3->%
+% Mondays as timeline
+{\text{\begin{tikzpicture}[xscale=0.57, baseline={(current bounding box.center)}]
+\tikztimeline{2}{7}
+\tikztimelineinterval{0+1/7}{0+2/7}{2}{}
+\tikztimelineinterval{1+1/7}{1+2/7}{2}{}
+\tikztimelineinterval[draw=none,text=black]{0}{1}{-0.5}{\tiny W1}
+\tikztimelineinterval[draw=none,text=black]{1}{2}{-0.5}{\tiny W2}
+\end{tikzpicture}}}
+% Mondays as text
+{Mondays},
+\alt<3->%
+% Fridays as timeline
+{\text{\begin{tikzpicture}[xscale=0.57, baseline={(current bounding box.center)}]
+\tikztimeline{2}{7}
+\tikztimelineinterval{0+5/7}{0+6/7}{2}{}
+\tikztimelineinterval{1+5/7}{1+6/7}{2}{}
+\tikztimelineinterval[draw=none,text=black]{0}{1}{-0.5}{\tiny W1}
+\tikztimelineinterval[draw=none,text=black]{1}{2}{-0.5}{\tiny W2}
+\end{tikzpicture}}}
+% Fridays as text
+{Fridays}
+\right)},
+\alt<5->%
+% Next(DocTime, January) as timeline
+{\text{\begin{tikzpicture}[xscale=0.57, baseline={(current bounding box.center)}]
+\tikztimeline{2}{12}
+\tikztimelineinterval{1+0/12}{1+1/12}{2}{}
+\tikztimelineinterval[draw=none,text=black]{0}{1}{-0.5}{\tiny 2018}
+\tikztimelineinterval[draw=none,text=black]{1}{2}{-0.5}{\tiny 2019}
+\end{tikzpicture}}}
+% Next(DocTime, January) as operator
+{\operatorname{Next}\left(
+\alt<3->%
+% DocTime as timeline
+{\text{\begin{tikzpicture}[xscale=0.57, baseline={(current bounding box.center)}]
+\tikztimeline{2}{12}
+\tikztimelineinterval[draw=event]{0+3/24}{0+4/24}{2}{} % bigger than 1/365 to be visible
+\tikztimelineinterval[draw=none,text=black]{0}{1}{-0.5}{\tiny 2018}
+\tikztimelineinterval[draw=none,text=black]{1}{2}{-0.5}{\tiny 2019}
+\end{tikzpicture}}}
+% DocTime as operator
+{\operatorname{DocTime}},
+\alt<3->{%
+% January as timeline
+\text{\begin{tikzpicture}[xscale=0.57, baseline={(current bounding box.center)}]
+\tikztimeline{2}{12}
+\tikztimelineinterval{0+0/12}{0+1/12}{2}{}
+\tikztimelineinterval{1+0/12}{1+1/12}{2}{}
+\tikztimelineinterval[draw=none,text=black]{0}{1}{-0.5}{\tiny 2018}
+\tikztimelineinterval[draw=none,text=black]{1}{2}{-0.5}{\tiny 2019}
+\end{tikzpicture}}}
+% January as text
+{January}
+\right)}
+\right)}
+% Intersection(Union(Mondays, Fridays), Next(DocTime, January)) as text
+{}}
+$
+\end{frame}
+
+
+\begin{frame}{Models: compared to human judgments}
+\begin{tabular}{ l l c c c }
+\hline\hline
+Data & Model & Precision & Recall & $F_1$ \\
+\hline
+News \\
+\hline
+TempEval 2013 & HeidelTime (grammar) & 71 & 77 & 74 \\
+TempEval 2013 & \cite{laparra-etal:2018:TACL} & 82 & 73 & 77 \\
+\hline
+\pause
+Clinical \\
+\hline
+THYME corpus & HeidelTime (grammar) & 60 & 82 & 70 \\
+THYME corpus & \cite{laparra-etal:2018:TACL} & 75 & 77 & 76 \\
+\hline\hline
+\end{tabular}
 \end{frame}
 
 
