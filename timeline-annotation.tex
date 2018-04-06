@@ -17,7 +17,7 @@
 \usepackage{forest}
 \useforestlibrary{linguistics}
 \usepackage{appendixnumberbeamer}
-\usepackage[style=authoryear,uniquename=false,maxnames=2,minnames=1,maxbibnames=99,sorting=nyt,backend=biber]{biblatex}
+\usepackage[style=authoryear,maxbibnames=99,sorting=nyt,backend=biber]{biblatex}
 \AtEveryBibitem{\clearfield{note}}
 
 
@@ -313,7 +313,7 @@ Annotation studies
 \section{Timelines as graphs}
 
 
-\begin{frame}{Timelines as graphs: ISO-TimeML \smallcite{pustejovsky2010iso}}
+\begin{frame}{Timelines as graphs: ISO-TimeML}{\smallcite{pustejovsky2003timeml,pustejovsky2010iso}}
 \begin{columns}
 \begin{column}{0.35\textwidth}
 \small
@@ -462,9 +462,9 @@ that anyone else was
 \begin{frame}{Annotation: syntax-driven relations}
 \strut\alert{%
 \only<1>{TempEval: arbitrary pairs}%
-\only<2->{\cite{bethard-etal:2007:IJSC}: linguistically plausible pairs \only<6->{\hfill Agr: 0.90}}}%
+\only<2->{\cite{bethard-etal:2007:IJSC}: linguistically plausible pairs} \\
+\strut\only<6->{\hfill Agreement: 0.90}}
 
-\smallskip
 \AnnotateTwoOn{2-}{turning}{event}{Turning}
 its back on
 \AnnotateTwo[draw=time]{210-years}{time}{210 years}
@@ -487,7 +487,7 @@ Australia a republic under its own president.
 \onslide<3->
 \centering
 \begin{forest}
-for tree={l sep=0.5em, l=0.5em}
+for tree={l sep=0.3em, l=0.3em}
 [S
   [VP
     [{\eventbox{Turning}},name=turning]
@@ -519,7 +519,6 @@ for tree={l sep=0.5em, l=0.5em}
 \begin{frame}{Annotation: relations as tree structures}
 
 \alert{%
-\AtNextCitekey{\defcounter{maxnames}{99}}%
 \cite{kolomiyets-etal:2012:ACL}
 \hfill
 \only<17->{Agreement: 0.70}}
@@ -645,7 +644,6 @@ Learning $h_{\text{link}}$:
 
 \begin{frame}{Models: relation detection as parsing}
 
-\AtNextCitekey{\defcounter{maxnames}{99}}%
 \alert{\cite{kolomiyets-etal:2012:ACL}}
 
 \smallskip
@@ -740,8 +738,8 @@ Clinical TempEval 2017 & pair classify & 43 $F_1$ \\
 \pause
 Children's stories \\
 \hline
-\cite{kolomiyets-etal:2012:ACL} & pair classify & 61 $LAS$ \\
-\cite{kolomiyets-etal:2012:ACL} & shift-reduce parser & 65 $LAS$ \\
+\AtNextCite{\defcounter{maxnames}{1}}\cite{kolomiyets-etal:2012:ACL} & pair classify & 61 $LAS$ \\
+\AtNextCite{\defcounter{maxnames}{1}}\cite{kolomiyets-etal:2012:ACL} & shift-reduce parser & 65 $LAS$ \\
 \hline\hline
 \end{tabular}
 \end{frame}
@@ -869,9 +867,11 @@ Annotate formally-defined, semantically-compositional time operators\pause:
 
 
 \begin{frame}{Models: time normalization via grammars}
-Hand-constructed grammars \smallcite{StroetgenGertz2013:LREjournal,bethard:2013:EMNLP,lee-EtAl:2014:P14-1}\pause:
+Hand-constructed grammars \\
+\smallcite{StroetgenGertz2013:LREjournal,bethard:2013:EMNLP,lee-EtAl:2014:P14-1}
+\pause
 
-\bigskip
+\smallskip
 \begin{tikzpicture}[produces/.style={-implies,line width=0.1em,double,double distance=0.1em}]
 \node (expr) {\word{the week of March 6}};
 \node[below=1em of expr] (tree) {\small
@@ -903,7 +903,6 @@ for tree={l sep=0.75em, l=0.75em}
 
 
 \begin{frame}[t]{Models: time normalization as parsing}
-\AtNextCitekey{\defcounter{maxnames}{99}}%
 \alert{\cite{laparra-etal:2018:TACL}}
 \bigskip
 
@@ -968,7 +967,6 @@ Step 1: Neural networks learn to find times in text
 
 
 \begin{frame}[t]{Models: time normalization as parsing}
-\AtNextCitekey{\defcounter{maxnames}{99}}%
 \alert{\cite{laparra-etal:2018:TACL}}
 
 \bigskip
@@ -1088,13 +1086,13 @@ Data & Model & Precision & Recall & $F_1$ \\
 News \\
 \hline
 TempEval 2013 & HeidelTime (grammar) & 71 & 77 & 74 \\
-TempEval 2013 & \cite{laparra-etal:2018:TACL} & 82 & 73 & 77 \\
+TempEval 2013 & \AtNextCite{\defcounter{maxnames}{1}}\cite{laparra-etal:2018:TACL} & 82 & 73 & 77 \\
 \hline
 \pause
 Clinical \\
 \hline
 THYME corpus & HeidelTime (grammar) & 60 & 82 & 70 \\
-THYME corpus & \cite{laparra-etal:2018:TACL} & 75 & 77 & 76 \\
+THYME corpus & \AtNextCite{\defcounter{maxnames}{1}}\cite{laparra-etal:2018:TACL} & 75 & 77 & 76 \\
 \hline\hline
 \end{tabular}
 \end{frame}
