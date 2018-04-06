@@ -542,7 +542,7 @@ himself on the ground and
 to be dead.%
 \begin{tikzpicture}[remember picture,overlay]%
 \only<4->{\AnnotateLink{relation label=included, near start}{appeared.north}{on.south}}%
-\only<7->{\AnnotateLink{relation label=after, out=10, in=170}{observed.east}{made.west}}%
+\only<7->{\AnnotateLink{relation label=before, swap, out=170, in=10}{made.west}{observed.east}}%
 \only<8->{\AnnotateLink{relation label=after, swap, out=170, in=10}{made.north}{appeared.east}}%
 \only<10->{\AnnotateLink{relation label=after, near start}{climbed.north}{made.south}}%
 \only<12->{\AnnotateLink{relation label=after, swap, out=170, in=10}{hid.west}{climbed.east}}
@@ -556,10 +556,186 @@ to be dead.%
 
 
 \begin{frame}{Models: relation detection as pair classification}
+\begin{columns}
+\begin{column}[T]{0.5\textwidth}
+\centering
+\begin{tabular}{@{}ll@{}}
+$x$ & $h_{\text{link}}(x)$ \\
+\hline
+(died, clashes) & \textsc{included} \\
+(died, four weeks) & \textsc{after} \\
+\ldots & \ldots
+\end{tabular}
+
+At least 11 people have
+\AnnotateTwo{pair-died}{Event}{died}
+in
+\\[.5\baselineskip]
+new
+\AnnotateTwo{pair-clashes}{Event}{clashes}
+with security forces in
+\\[.5\baselineskip]
+Tunisia after
+\AnnotateTwo[draw=time]{pair-four-weeks}{Time}{four weeks}
+of
+\AnnotateTwo{pair-unrest}{Event}{unrest},
+\\[.5\baselineskip]
+it was
+\AnnotateTwo{pair-reported}{Event}{reported}
+\AnnotateTwo[draw=time]{pair-today}{Time}{today}\ldots%
+\begin{tikzpicture}[remember picture,overlay]%
+\only<2>{%
+\path[thick,->] (pair-died) edge (pair-clashes);
+\path[thick,->] (pair-died) edge (pair-four-weeks);
+\path[thick,->] (pair-died) edge (pair-unrest);
+\path[thick,->] (pair-died) edge (pair-reported);
+\path[thick,->] (pair-died) edge (pair-today);}%
+\only<3>{%
+\path[thick,->] (pair-clashes) edge (pair-died);
+\path[thick,->] (pair-clashes) edge (pair-four-weeks);
+\path[thick,->] (pair-clashes) edge (pair-unrest);
+\path[thick,->] (pair-clashes) edge (pair-reported);
+\path[thick,->] (pair-clashes) edge (pair-today);}%
+\only<4>{%
+\path[thick,->] (pair-four-weeks) edge (pair-died);
+\path[thick,->] (pair-four-weeks) edge (pair-clashes);
+\path[thick,->] (pair-four-weeks) edge (pair-unrest);
+\path[thick,->] (pair-four-weeks) edge (pair-reported);
+\path[thick,->] (pair-four-weeks) edge (pair-today);}%
+\end{tikzpicture}%
+\end{column}%
+\begin{column}[T]{0.5\textwidth}
+\onslide<5->
+Features $x = (f_1, f_2, \ldots, f_m)$
+\begin{itemize}
+\item Events part-of-speech
+\item Bag of words between
+\item Path in syntactic tree
+{\small
+\begin{forest}
+for tree={l sep=0.5em, l=0.5em}
+[VP
+  [clashes]
+  [$\ldots$]
+  [PP
+    [after]
+    [NP
+      [four weeks, roof] ] ] ]
+\end{forest}}
+\end{itemize}
+\onslide<6->
+\vspace{-\baselineskip}
+Learning $h_{\text{link}}$:
+\begin{itemize}
+\item Logistic regression
+\item Support vector machines
+\item Neural networks
+\end{itemize}
+\end{column}
+\end{columns}
 \end{frame}
 
 
 \begin{frame}{Models: relation detection as parsing}
+
+\AtNextCitekey{\defcounter{maxnames}{99}}%
+\alert{\cite{kolomiyets-etal:2012:ACL}}
+
+\smallskip
+Two travelers were
+\AnnotateTwo{on}{Event}{on}
+the road together, when a bear suddenly
+\\[0.75\baselineskip]
+\AnnotateTwo{appeared}{Event}{appeared}
+on the scene.
+Before he
+\AnnotateTwo{observed}{Event}{observed}
+them, one
+\AnnotateTwo{made}{Event}{made}
+for a tree
+\\[0.75\baselineskip]
+at the side of the road, and
+\AnnotateTwo{climbed}{Event}{climbed}
+up into the branches and
+\AnnotateTwo{hid}{Event}{hid}\ldots
+\begin{tikzpicture}[remember picture,overlay]%
+\only<7->{\AnnotateLink{relation label=included, near start}{appeared.north}{on.south}}%
+\only<13->{\AnnotateLink{relation label=before, swap, out=170, in=10}{made.west}{observed.east}}%
+\only<15->{\AnnotateLink{relation label=after, swap, out=170, in=10}{made.north}{appeared.east}}%
+\end{tikzpicture}%
+
+\smallskip
+\begin{tikzpicture}[
+  stack/.style={rectangle split, rectangle split parts=####1,draw, anchor=south west},
+  queue/.style={rectangle split, rectangle split horizontal, rectangle split parts=####1,draw, anchor=south west},
+  action/.style={anchor=south west}
+]
+\footnotesize
+\node[stack=4,label=below:Stack] at (0, 0) {\strut%
+\invisible{on$\leftarrow$appeared$\rightarrow$made$\rightarrow$observed}%
+\nodepart{two}\strut%
+\only<11-12>{made}
+\nodepart{three}\strut%
+\only<5-6>{appeared}\only<9-12>{observed}\only<13-14>{made$\rightarrow$observed}%
+\nodepart{four}\strut%
+\only<3-6>{on}\only<7-14>{on$\leftarrow$appeared}\only<15->{on$\leftarrow$appeared$\rightarrow$made$\rightarrow$observed}%
+};
+\node[action] at (5.2, 1.4) {\strut Classification: \large\alert{%
+\only<2,4,8,10>{\textsc{shift}}%
+\only<6>{\textsc{reduce}$_{\textsc{\scriptsize IsIncluded}}$}%
+\only<12>{\textsc{reduce}$_{\textsc{\scriptsize Before}}$}%
+\only<14>{\textsc{reduce}$_{\textsc{\scriptsize After}}$}%
+}};
+\node[queue=4,label=below:Queue, text width=4em] at (5.2, 0) {\strut%
+\only<1-2>{on}%
+\only<3-4>{appeared}%
+\only<5-8>{observed}%
+\only<9-10>{made}%
+\only<11->{climbed}%
+\nodepart{two}\strut%
+\only<1-2>{appeared}%
+\only<3-4>{observed}%
+\only<5-8>{made}%
+\only<9-10>{climbed}%
+\only<11->{hid}%
+\nodepart{three}\strut%
+\only<1-2>{observed}%
+\only<3-4>{made}%
+\only<5-8>{climbed}%
+\only<9-10>{hid}%
+\only<11->{threw}%
+\nodepart{four}\strut%
+\ldots%
+};
+\end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}{Models: computers vs. human judgments}
+\begin{tabular}{ l l c }
+\hline\hline
+Data & Model & Performance \\
+\hline
+News \\
+\hline
+TempEval 2007 & pair classify & 55-62 acc. \\
+TempEval 2010 & pair classify & 56-66 acc. \\
+TempEval 2013 & pair classify & 36 $F_1$ \\
+\hline
+\pause
+Clinical \\
+\hline
+I2B2 2012 & pair classify & 69 $F_1$ \\
+Clinical TempEval 2015 & pair classify & 26 $F_1$ \\
+Clinical TempEval 2016 & pair classify & 57 $F_1$ \\
+Clinical TempEval 2017 & pair classify & 43 $F_1$ \\
+\hline
+\pause
+Children's stories \\
+\hline
+\cite{kolomiyets-etal:2012:ACL} & shift-reduce parser & 65 $LAS$ \\
+\hline\hline
+\end{tabular}
 \end{frame}
 
 
