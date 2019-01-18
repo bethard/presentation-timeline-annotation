@@ -785,12 +785,8 @@ $
 \end{frame}
 
 
-\begin{frame}{Machine learning models can leverage big data}
-\end{frame}
+\begin{frame}{Machine learning can leverage big data}
 
-
-\begin{frame}{Hard tasks benefit from machine learning}
-\centering
 \begin{tabular}{ l c c }
 \hline\hline
 & TempEval 2013 & THYME \\
@@ -798,9 +794,16 @@ Model & (News) $F_1$ & (Clinical) $F_1$ \\
 \hline
 HeidelTime (grammar) & 74 & 70 \\
 \AtNextCite{\defcounter{maxnames}{1}}\cite{laparra-etal:2018:TACL} & 77 &  76 \\
-+pretrained embeddings & 82 & 86\\
+\visible<3->{+ FLAIR character representations & 82 & 86} \\
 \hline\hline
 \end{tabular}
+
+\pause
+\bigskip
+\AtNextCite{\defcounter{maxnames}{1}}\cite{laparra-etal:2018:TACL} requires manually annotated compositional times for training; only a few thousand exist.
+
+\smallskip
+Language models like FLAIR \smallcite{akbik-blythe-vollgraf:2018:C18-1} learn character representations and can train on billions of words of un-annotated text.
 \end{frame}
 
 
